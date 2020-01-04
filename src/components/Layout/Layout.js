@@ -3,11 +3,12 @@ import Aux from '../../hoc/Auxx';
 
 import Classes from './Layout.css';
 import Toolbar from '../Navigation/Toolbar/Toolbar';
-
+import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
 const layout = (props) => (
     <Aux>
-        <Toolbar/>
+        <Toolbar />
+        <SideDrawer />
         <main className={Classes.Content}>
             {props.children}
         </main>
