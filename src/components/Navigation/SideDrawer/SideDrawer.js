@@ -7,9 +7,11 @@ import Aux from '../../../hoc/Auxx';
 
 const sideDrawer = (props) => {
     let attachedClasses = [classes.SideDrawer, classes.Close];
-    if (props.open) {
+    if (props.open)
         attachedClasses = [classes.SideDrawer, classes.Open];
-    }
+    else
+        attachedClasses = [classes.SideDrawer, classes.Close];
+
     return (
         <Aux>
             <Backdrop show={props.open} clicked={props.closed} />
