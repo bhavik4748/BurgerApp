@@ -1,35 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Aux from '../../../hoc/Auxx';
 import Button from '../../UI/Button/Button';
 
-const orderSummary = (props) => {
-    const ingredientsSummary = Object.keys(props.ingredients)
-        .map((igKey) => {
-            return (
-                <li key={igKey}>
-                    <span style={{ transform: 'capitalize' }}>
-                        {igKey}:{props.ingredients[igKey]}
-                    </span>
-                </li>
-            )
-        })
+class OrderSummary extends Component {
 
-    return (
+    //this could be a Functional Component, doesn't have to be Component
+    componentDidUpdate() {
+        console.log('[Order Summary] Update ');
+        return true;
+    }
 
-        <Aux>
-            <h3>Your Order</h3>
-            <p>A delicious burger with the following ingredients:</p>
-            <ul>
-                {ingredientsSummary}
-            </ul>
-            <h3>Total price:{props.price.toFixed(2)}</h3>
-            <h3>Continue to checkout?</h3>
-            <Button btnType="Danger" clicked={props.purchasedCancelled}>CANCEL</Button>
-            <Button btnType="Success" clicked={props.purchaseContinued}>CONTINUE</Button>
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return true;
+    // }
 
-        </Aux>
+    render() {
+        const ingredientsSummary = Object.keys(this.props.ingredients)
+            .map((igKey) => {
+                return (
+                    <li key={igKey}>
+                        <span style={{ transform: 'capitalize' }}>
+                            {igKey}:{this.props.ingredients[igKey]}
+                        </span>
+                    </li>
+                )
+            })
+        return (
+            <Aux>
+                <h3>Your Order</h3>
+                <p>A delicious burger with the following ingredients:</p>
+                <ul>
+                    {ingredientsSummary}
+                </ul>
+                <h3>Total price:{this.props.price.toFixed(2)}</h3>
+                <h3>Continue to checkout?</h3>
+                <Button btnType="Danger" clicked={this.props.purchasedCancelled}>CANCEL</Button>
+                <Button btnType="Success" clicked={this.props.purchaseContinued}>CONTINUE</Button>
+            </Aux>
+        );
 
-    );
-};
+    }
 
-export default orderSummary;
+}
+export default OrderSummary;
