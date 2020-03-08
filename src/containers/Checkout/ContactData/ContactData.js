@@ -70,10 +70,14 @@ class ContactData extends Component {
 
     orderHandler = (event) => {
         event.preventDefault();
-        console.log(this.props.ingredients);
+        const formData = {};
+        for (let formElementIdentifier in this.state.orderForm) {
+            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        }
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
+            orderData: formData
         };
         this.setState({ loading: true });
 
@@ -83,6 +87,18 @@ class ContactData extends Component {
                 this.setState({ loading: false })
             })
             .catch(error => this.setState({ loading: false }));
+    }
+
+    inputChangeHandler = (event, inputIdentifier) => {
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        };
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifier]
+        };
+        updatedFormElement.value = event.target.value;
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
+        this.setState({ orderForm: updatedOrderForm });
     }
 
     render() {
@@ -95,7 +111,7 @@ class ContactData extends Component {
         }
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {formElementArray.map(formElement => {
                     return (
                         <Input
@@ -103,11 +119,12 @@ class ContactData extends Component {
                             elementType={formElement.config.elementType}
                             elementConfig={formElement.config.elementConfig}
                             value={formElement.config.value}
+                            changed={(event) => this.inputChangeHandler(event, formElement.id)}
                         ></Input>
                     )
 
                 })}
-                <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
+                <Button btnType="Success" >Order</Button>
             </form>);
         if (this.state.loading)
             form = <Spinner />
