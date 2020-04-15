@@ -5,6 +5,8 @@ import classes from './ContactData.css';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import withErrorHandler from '../../../hoc/withErrorHandling/withErrorHandling';
+import * as actions from '../../../store/actions';
 
 class ContactData extends Component {
     state = {
@@ -94,7 +96,7 @@ class ContactData extends Component {
             },
         },
         formIsValid: false,
-        loading: false
+
     }
 
     orderHandler = (event) => {
@@ -108,14 +110,8 @@ class ContactData extends Component {
             price: this.props.price,
             orderData: formData
         };
-        this.setState({ loading: true });
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.props.history.push('/');
-                this.setState({ loading: false })
-            })
-            .catch(error => this.setState({ loading: false }));
+        this.props.onOrderBurver(order);
     }
 
     checkValidity(value, rules) {
@@ -181,7 +177,7 @@ class ContactData extends Component {
                 })}
                 <Button btnType="Success" disabled={!this.state.formIsValid} >Order</Button>
             </form>);
-        if (this.state.loading)
+        if (this.props.loading)
             form = <Spinner />
 
 
@@ -197,8 +193,16 @@ class ContactData extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        loading: state.order.loading
     };
 }
-export default connect(mapStateToProps)(ContactData);
+
+const mapDispactToProps = dispatch => {
+    return {
+        onOrderBurver: (orderData) => dispatch(actions.purchaseBurger(orderData))
+    };
+}
+
+export default connect(mapStateToProps, mapDispactToProps)(withErrorHandler(ContactData, axios));
