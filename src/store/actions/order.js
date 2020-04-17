@@ -33,7 +33,15 @@ export const purchaseBurger = (orderData) => {
                 dispach(purchaseBurgerSuccess(response.data.name, orderData))
             })
             .catch(error => {
+                console.log('error');
+                console.log(error);
                 dispach(purchaseBurgerFail(error));
             });
+    }
+}
+
+export const purchaseInit = () => {
+    return {
+        type: actionTypes.PURCHASE_INIT
     }
 }
